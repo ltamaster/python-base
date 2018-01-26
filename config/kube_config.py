@@ -15,6 +15,7 @@
 import atexit
 import base64
 import datetime
+import json
 import os
 import tempfile
 
@@ -23,10 +24,8 @@ import google.auth.transport.requests
 import oauthlib.oauth2
 import urllib3
 import yaml
-import json
 from requests_oauthlib import OAuth2Session
 from six import PY3
-
 
 from kubernetes.client import ApiClient, Configuration
 
@@ -260,7 +259,7 @@ class KubeConfigLoader(object):
             ).decode('utf-8')
         else:
             cert = base64.b64decode(
-                provider['config']['idp-certificate-authority-data']
+                provider['config']['idp-certificate-authority-data']+ "=="
             )
 
         with open(ca_cert.name, 'w') as fh:
@@ -269,7 +268,7 @@ class KubeConfigLoader(object):
         config = Configuration()
         config.ssl_ca_cert = ca_cert.name
 
-        client = ApiClient(config=config)
+        client = ApiClient(configuration=config)
 
         response = client.request(
             method="GET",
