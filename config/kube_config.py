@@ -246,6 +246,9 @@ class KubeConfigLoader(object):
                 (_is_expired(datetime.datetime.fromtimestamp(expire)))):
             self._refresh_oidc(provider)
 
+            if self._config_persister:
+                self._config_persister(self._config.value)
+
         self.token = "Bearer %s" % provider['config']['id-token']
 
         return self.token
@@ -290,6 +293,8 @@ class KubeConfigLoader(object):
             },
             auto_refresh_url=response['token_endpoint']
         )
+
+        request.verify = False
 
         try:
             refresh = request.refresh_token(
