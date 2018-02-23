@@ -19,8 +19,8 @@ import os
 import shutil
 import tempfile
 import unittest
-import mock
 
+import mock
 import yaml
 from six import PY3
 
@@ -71,14 +71,12 @@ TEST_CLIENT_CERT_BASE64 = _base64(TEST_CLIENT_CERT)
 
 TEST_OIDC_TOKEN = "test-oidc-token"
 TEST_OIDC_INFO = "{\"name\": \"test\"}"
-TEST_OIDC_LOGIN = _base64(TEST_OIDC_TOKEN) + "." + \
-                  _base64(TEST_OIDC_INFO) + "." + \
-                  TEST_CLIENT_CERT_BASE64
+TEST_OIDC_BASE = _base64(TEST_OIDC_TOKEN) + "." + _base64(TEST_OIDC_INFO)
+TEST_OIDC_LOGIN = TEST_OIDC_BASE + "." + TEST_CLIENT_CERT_BASE64
 TEST_OIDC_TOKEN = "Bearer %s" % TEST_OIDC_LOGIN
-TEST_OIDC_EXPIRED_INFO = "{\"name\": \"test\",\"exp\": 536457600}"
-TEST_OIDC_EXPIRED_LOGIN = _base64(TEST_OIDC_TOKEN) + "." + \
-                          _base64(TEST_OIDC_EXPIRED_INFO) + "." + \
-                          TEST_CLIENT_CERT_BASE64
+TEST_OIDC_EXP = "{\"name\": \"test\",\"exp\": 536457600}"
+TEST_OIDC_EXP_BASE = _base64(TEST_OIDC_TOKEN) + "." + _base64(TEST_OIDC_EXP)
+TEST_OIDC_EXPIRED_LOGIN = TEST_OIDC_EXP_BASE + "." + TEST_CLIENT_CERT_BASE64
 TEST_OIDC_CA = _base64(TEST_CERTIFICATE_AUTH)
 
 
