@@ -243,7 +243,7 @@ class KubeConfigLoader(object):
         expire = jwt_attributes.get('exp')
 
         if ((expire is not None) and
-                (_is_expired(datetime.datetime.fromtimestamp(expire)))):
+                (_is_expired(datetime.datetime.fromtimestamp(expire,tz=UTC)))):
             self._refresh_oidc(provider)
 
             if self._config_persister:
@@ -294,18 +294,18 @@ class KubeConfigLoader(object):
             auto_refresh_url=response['token_endpoint']
         )
 
-        request.verify = False
-
         try:
             refresh = request.refresh_token(
                 token_url=response['token_endpoint'],
                 refresh_token=provider['config']['refresh-token'],
-                auth=(provider['config']['client-id'], provider['config']['client-secret'])
+                auth=(provider['config']['client-id'], provider['config']['client-secret']),
+                verify=ca_cert.name
             )
         except oauthlib.oauth2.rfc6749.errors.InvalidClientIdError:
             return
 
         provider['config'].value['id-token'] = refresh['id_token']
+        provider['config'].value['refresh-token'] = refresh['refresh_token']
 
     def _load_user_token(self):
         token = FileOrData(
