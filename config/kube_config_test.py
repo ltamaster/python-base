@@ -601,7 +601,7 @@ class TestKubeConfigLoader(BaseTestCase):
 
         mock_ApiClient.return_value = mock_response
 
-        mock_OAuth2Session.return_value = {"id_token": "abc123"}
+        mock_OAuth2Session.return_value = {"id_token": "abc123","refresh_token":"newtoken123"}
 
         loader = KubeConfigLoader(
             config_dict=self.TEST_KUBE_CONFIG,
