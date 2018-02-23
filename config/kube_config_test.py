@@ -68,13 +68,19 @@ TEST_CLIENT_KEY_BASE64 = _base64(TEST_CLIENT_KEY)
 TEST_CLIENT_CERT = "client-cert"
 TEST_CLIENT_CERT_BASE64 = _base64(TEST_CLIENT_CERT)
 
+
 TEST_OIDC_TOKEN = "test-oidc-token"
-TEST_OIDC_INFO="{\"name\": \"test\"}"
-TEST_OIDC_LOGIN = _base64(TEST_OIDC_TOKEN) +"."+ _base64(TEST_OIDC_INFO)+"."+ TEST_CLIENT_CERT_BASE64
+TEST_OIDC_INFO = "{\"name\": \"test\"}"
+TEST_OIDC_LOGIN = _base64(TEST_OIDC_TOKEN) + "." + \
+                  _base64(TEST_OIDC_INFO) + "." + \
+                  TEST_CLIENT_CERT_BASE64
 TEST_OIDC_TOKEN = "Bearer %s" % TEST_OIDC_LOGIN
-TEST_OIDC_EXPIRED_INFO="{\"name\": \"test\",\"exp\": 536457600}"
-TEST_OIDC_EXPIRED_LOGIN = _base64(TEST_OIDC_TOKEN) + "." + _base64(TEST_OIDC_EXPIRED_INFO) +"."+ TEST_CLIENT_CERT_BASE64
+TEST_OIDC_EXPIRED_INFO = "{\"name\": \"test\",\"exp\": 536457600}"
+TEST_OIDC_EXPIRED_LOGIN = _base64(TEST_OIDC_TOKEN) + "." + \
+                          _base64(TEST_OIDC_EXPIRED_INFO) + "." + \
+                          TEST_CLIENT_CERT_BASE64
 TEST_OIDC_CA = _base64(TEST_CERTIFICATE_AUTH)
+
 
 class BaseTestCase(unittest.TestCase):
 
@@ -601,7 +607,8 @@ class TestKubeConfigLoader(BaseTestCase):
 
         mock_ApiClient.return_value = mock_response
 
-        mock_OAuth2Session.return_value = {"id_token": "abc123","refresh_token":"newtoken123"}
+        mock_OAuth2Session.return_value = {"id_token": "abc123",
+                                           "refresh_token": "newtoken123"}
 
         loader = KubeConfigLoader(
             config_dict=self.TEST_KUBE_CONFIG,
@@ -609,7 +616,6 @@ class TestKubeConfigLoader(BaseTestCase):
         )
         self.assertTrue(loader._load_oid_token())
         self.assertEqual("Bearer abc123", loader.token)
-
 
     def test_user_pass(self):
         expected = FakeConfig(host=TEST_HOST, token=TEST_BASIC_TOKEN)

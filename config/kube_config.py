@@ -243,7 +243,8 @@ class KubeConfigLoader(object):
         expire = jwt_attributes.get('exp')
 
         if ((expire is not None) and
-                (_is_expired(datetime.datetime.fromtimestamp(expire,tz=UTC)))):
+            (_is_expired(datetime.datetime.fromtimestamp(expire,
+                                                         tz=UTC)))):
             self._refresh_oidc(provider)
 
             if self._config_persister:
@@ -262,7 +263,7 @@ class KubeConfigLoader(object):
             ).decode('utf-8')
         else:
             cert = base64.b64decode(
-                provider['config']['idp-certificate-authority-data']+ "=="
+                provider['config']['idp-certificate-authority-data'] + "=="
             )
 
         with open(ca_cert.name, 'w') as fh:
@@ -298,7 +299,8 @@ class KubeConfigLoader(object):
             refresh = request.refresh_token(
                 token_url=response['token_endpoint'],
                 refresh_token=provider['config']['refresh-token'],
-                auth=(provider['config']['client-id'], provider['config']['client-secret']),
+                auth=(provider['config']['client-id'],
+                      provider['config']['client-secret']),
                 verify=ca_cert.name
             )
         except oauthlib.oauth2.rfc6749.errors.InvalidClientIdError:
