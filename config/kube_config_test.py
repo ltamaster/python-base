@@ -21,6 +21,7 @@ import tempfile
 import unittest
 
 import mock
+import config
 import yaml
 from six import PY3
 
