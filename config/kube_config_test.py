@@ -21,6 +21,8 @@ import tempfile
 import unittest
 
 import mock
+import unittest
+import requests
 import yaml
 from six import PY3
 
@@ -595,22 +597,30 @@ class TestKubeConfigLoader(BaseTestCase):
     def test_oidc_with_refresh(self, mock_ApiClient, mock_OAuth2Session):
         # mock_response = mock.MagicMock()
 
-        mock_response = mock.Mock()
+        mockresponse = mock.Mock()
+        mockresponse.status = 200
+        mockresponse.data = json.dumps({
+                "token_endpoint": "https://example.org/identity/token"
+            })
+        mock_ApiClient.return_value = mockresponse
+
+
+        # mock_response = mock.Mock()
         # mock_response.data = json.dumps({
         #        "token_endpoint": "https://example.org/identity/token"
         #    })
 
-        type(mock_response).status = mock.PropertyMock(
-            return_value=200
-        )
+        # type(mock_response).status = mock.PropertyMock(
+        #     return_value=200
+        # )
 
-        type(mock_response).data = mock.PropertyMock(
-           return_value=json.dumps({
-               "token_endpoint": "https://example.org/identity/token"
-           })
-        )
+        # type(mock_response).data = mock.PropertyMock(
+        #    return_value=json.dumps({
+        #       "token_endpoint": "https://example.org/identity/token"
+        #   })
+        # )
 
-        mock_ApiClient.return_value = mock_response
+        #mock_ApiClient.return_value = mock_response
 
         mock_OAuth2Session.return_value = {"id_token": "abc123",
                                            "refresh_token": "newtoken123"}
