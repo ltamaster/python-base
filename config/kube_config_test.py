@@ -593,24 +593,24 @@ class TestKubeConfigLoader(BaseTestCase):
     @mock.patch('config.kube_config.OAuth2Session.refresh_token')
     @mock.patch('config.kube_config.ApiClient.request')
     def test_oidc_with_refresh(self, mock_ApiClient, mock_OAuth2Session):
-        #mock_response = mock.MagicMock()
+        # mock_response = mock.MagicMock()
 
         mock_response = mock.Mock()
-        mock_response.status_code = 200
-        mock_response.data = json.dumps({
-                "token_endpoint": "https://example.org/identity/token"
-            })
-
-        # type(mock_response).status = mock.PropertyMock(
-        #    return_value=200
-        # )
-        # type(mock_response).data = mock.PropertyMock(
-        #    return_value=json.dumps({
+        # mock_response.data = json.dumps({
         #        "token_endpoint": "https://example.org/identity/token"
         #    })
-        # )
 
-        mock_ApiClient.return_value = None
+        type(mock_response).status = mock.PropertyMock(
+            return_value=200
+        )
+
+        type(mock_response).data = mock.PropertyMock(
+           return_value=json.dumps({
+               "token_endpoint": "https://example.org/identity/token"
+           })
+        )
+
+        mock_ApiClient.return_value = mock_response
 
         mock_OAuth2Session.return_value = {"id_token": "abc123",
                                            "refresh_token": "newtoken123"}
