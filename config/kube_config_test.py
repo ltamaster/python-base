@@ -594,7 +594,13 @@ class TestKubeConfigLoader(BaseTestCase):
     @mock.patch('config.kube_config.ApiClient.request')
     def test_oidc_with_refresh(self, mock_ApiClient, mock_OAuth2Session):
         #mock_response = mock.MagicMock()
-        test = True
+
+        mock_response = mock.Mock()
+        mock_response.status_code = 200
+        mock_response.data = json.dumps({
+                "token_endpoint": "https://example.org/identity/token"
+            })
+
         # type(mock_response).status = mock.PropertyMock(
         #    return_value=200
         # )
@@ -613,9 +619,8 @@ class TestKubeConfigLoader(BaseTestCase):
             config_dict=self.TEST_KUBE_CONFIG,
             active_context="expired_oidc",
         )
-        # self.assertTrue(loader._load_oid_token())
-        # self.assertEqual("Bearer abc123", loader.token)
-        self.assertTrue(test)
+        self.assertTrue(loader._load_oid_token())
+        self.assertEqual("Bearer abc123", loader.token)
 
     def test_user_pass(self):
         expected = FakeConfig(host=TEST_HOST, token=TEST_BASIC_TOKEN)
