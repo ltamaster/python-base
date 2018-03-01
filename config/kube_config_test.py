@@ -599,29 +599,6 @@ class TestKubeConfigLoader(BaseTestCase):
         mockresponse = mock.Mock()
         mockresponse.config.from_object('config')
 
-        # mockresponse.status = 200
-        # mockresponse.data = json.dumps({
-        #     "token_endpoint": "https://example.org/identity/token"
-        # })
-        # mock_ApiClient.return_value = mockresponse
-
-        # mock_response = mock.Mock()
-        # mock_response.data = json.dumps({
-        #        "token_endpoint": "https://example.org/identity/token"
-        #    })
-
-        # type(mock_response).status = mock.PropertyMock(
-        #     return_value=200
-        # )
-
-        # type(mock_response).data = mock.PropertyMock(
-        #    return_value=json.dumps({
-        #       "token_endpoint": "https://example.org/identity/token"
-        #   })
-        # )
-
-        #mock_ApiClient.return_value = mock_response
-
         mock_OAuth2Session.return_value = {"id_token": "abc123",
                                            "refresh_token": "newtoken123"}
 
