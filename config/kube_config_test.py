@@ -21,7 +21,6 @@ import tempfile
 import unittest
 
 import requests
-import requests_mock
 import mock
 import yaml
 from six import PY3
@@ -597,16 +596,8 @@ class TestKubeConfigLoader(BaseTestCase):
     def test_oidc_with_refresh(self, mock_ApiClient, mock_OAuth2Session):
         # mock_response = mock.MagicMock()
 
-        session = requests.Session()
-        adapter = requests_mock.Adapter()
-        session.mount('mock', adapter)
-
-        adapter.register_uri('GET', 'mock://test.com', text='data')
-        resp = session.get('mock://test.com')
-        resp.status_code, resp.text(200, 'data')
-
-        # mockresponse = mock.Mock()
-        # mockresponse.config.from_object('mock.Config')
+        mockresponse = mock.Mock()
+        mockresponse.config.from_object('config')
 
         # mockresponse.status = 200
         # mockresponse.data = json.dumps({
