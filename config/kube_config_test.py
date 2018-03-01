@@ -23,6 +23,9 @@ import unittest
 import requests
 import mock
 import yaml
+import oauthlib.oauth2
+from requests_oauthlib import OAuth2Session
+
 from six import PY3
 
 from .config_exception import ConfigException
