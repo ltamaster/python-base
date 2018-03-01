@@ -18,11 +18,9 @@ import json
 import os
 import shutil
 import tempfile
-import unittest
 
 import mock
 import unittest
-import requests
 import yaml
 from six import PY3
 
@@ -598,6 +596,8 @@ class TestKubeConfigLoader(BaseTestCase):
         # mock_response = mock.MagicMock()
 
         mockresponse = mock.Mock()
+        mockresponse.config.from_object('mock.Config')
+
         mockresponse.status = 200
         mockresponse.data = json.dumps({
                 "token_endpoint": "https://example.org/identity/token"
