@@ -23,8 +23,6 @@ import unittest
 import requests
 import mock
 import yaml
-import oauthlib.oauth2
-from requests_oauthlib import OAuth2Session
 
 from six import PY3
 
@@ -600,10 +598,10 @@ class TestKubeConfigLoader(BaseTestCase):
         mock_response = mock.MagicMock()
 
         type(mock_response).status = mock.PropertyMock(
-            return_value = 200
+            return_value=200
         )
         type(mock_response).data = mock.PropertyMock(
-            return_value = json.dumps({
+            return_value=json.dumps({
                 "token_endpoint": "https://example.org/identity/token"
             })
         )
