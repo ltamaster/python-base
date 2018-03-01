@@ -594,13 +594,21 @@ class TestKubeConfigLoader(BaseTestCase):
         self.assertTrue(loader._load_oid_token())
         self.assertEqual(TEST_OIDC_TOKEN, loader.token)
 
-    @mock.patch('config.kube_config.OAuth2Session.refresh_token')
-    @mock.patch('config.kube_config.ApiClient.request')
+    @mock.patch('kubernetes.config.kube_config.OAuth2Session.refresh_token')
+    @mock.patch('kubernetes.config.kube_config.ApiClient.request')
     def test_oidc_with_refresh(self, mock_ApiClient, mock_OAuth2Session):
-        # mock_response = mock.MagicMock()
+        mock_response = mock.MagicMock()
 
-        mockresponse = mock.Mock()
-        mockresponse.config.from_object('config')
+        type(mock_response).status = mock.PropertyMock(
+            return_value = 200
+        )
+        type(mock_response).data = mock.PropertyMock(
+            return_value = json.dumps({
+                "token_endpoint": "https://example.org/identity/token"
+            })
+        )
+
+        mock_ApiClient.return_value = mock_response
 
         mock_OAuth2Session.return_value = {"id_token": "abc123",
                                            "refresh_token": "newtoken123"}
@@ -609,8 +617,8 @@ class TestKubeConfigLoader(BaseTestCase):
             config_dict=self.TEST_KUBE_CONFIG,
             active_context="expired_oidc",
         )
-        # self.assertTrue(loader._load_oid_token())
-        # self.assertEqual("Bearer abc123", loader.token)
+        self.assertTrue(loader._load_oid_token())
+        self.assertEqual("Bearer abc123", loader.token)
 
     def test_user_pass(self):
         expected = FakeConfig(host=TEST_HOST, token=TEST_BASIC_TOKEN)
