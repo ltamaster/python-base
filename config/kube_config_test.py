@@ -19,11 +19,8 @@ import os
 import shutil
 import tempfile
 import unittest
-
-import requests
 import mock
 import yaml
-
 from six import PY3
 
 from .config_exception import ConfigException
